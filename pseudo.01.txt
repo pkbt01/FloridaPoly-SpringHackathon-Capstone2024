@@ -1,0 +1,43 @@
+DATA:
+    Sample rate.
+    Sample window size.
+
+    Active sensor reading stack:
+        Boolean pointer that the sensor thread can safely write to.
+        Has a maximum size dependant on the sample window size and sample rate.
+    User-readable sensor reading array:
+        Read-only boolean pointer that is periodically overwritten by the sensor thread.
+        Represents a window of samples from the sensor.
+        Shares the same size as the active reading stack.
+        Used to calculate RPM.
+
+LOOP:
+    Read sensor pin:
+        Add the reading to the sensor reading stack.
+        Once the stack fills, copy it into a read-only array and clear the stack.
+        Repeat.
+
+EXTERNAL:
+    Calculate RPM:
+        Iterate over the reading array and count the number of rising-edge state changes (i.e. from false to true)
+        Use the following equation to find RPM:
+            RPM = 60 * STATE_CHANGES / (CHANGES_PER_ROTATION * SAMPLE_WINDOW_LENGTH)
+
+on screen
+
+DATA:
+    Sample rate.
+    Sample window size.
+
+    Active sensor reading stack:
+    User-readable sensor reading array:
+
+LOOP:
+    Read sensor pin:
+        Add the reading to the sensor reading stack.
+        Once the stack fills, copy it into a read-only array and clear the stack.
+        Repeat.
+
+EXTERNAL:
+    Calculate RPM:
+        RPM = 60 * STATE_CHANGES / (CHANGES_PER_ROTATION * SAMPLE_WINDOW_LENGTH)
