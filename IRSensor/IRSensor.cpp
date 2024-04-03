@@ -10,6 +10,8 @@ IRSensor::IRSensor(int pin, int rate, double window)
     _deltaTime = 1.0 / _rate;
     _size = _window * _rate;
     _top = 0;
+    _avgTop = 0;
+    _avgSize = 10;
     _latestReading = 0;
 }
 
@@ -25,18 +27,13 @@ void IRSensor::Begin() {
 
     _scans_done = (bool*) malloc(sizeof(bool)*_size);
     _scans_live = (bool*) malloc(sizeof(bool)*_size);
-
-
+    _avgReadings = (int*) malloc(sizeof(int)*_avgSize);
 
     for(int i = _size-1; i >= 0; i--)
     {
       _scans_done[i] = 0;
       _scans_live[i] = 0;
     }
-
-   // Serial.print("Effective deltatime (ms): ");
-     //   Serial.print(deltaTime * 1000);
-       // Serial.println();
 }
 
 void IRSensor::AddReading(bool reading)
@@ -57,17 +54,11 @@ void IRSensor::AddReading(bool reading)
     }
 }
 
-/*int SumReadings()
+double IRSensor::GetRPM()
 {
-    int count = 0;
-    for(int i = 0; i < _size; i++)
-    {
-        if(_scans_done[i] == true)
-            count++;
-    }
+    return _avgRPM;
+}
 
-    return count;
-}*/
 
 void IRSensor::UpdateLatest()
 {
@@ -89,6 +80,23 @@ void IRSensor::UpdateLatest()
     }
 
     _latestReading = count;
+
+     _avgReadings[_avgTop] = _latestReading;
+
+    double sum = 0.0;
+
+    for (int i = 0; i < _avgSize; i++)
+    {
+      sum+= _avgReadings[i];
+    }
+
+    _avgRPM = sum / _avgSize;
+
+    _avgTop++;
+    if(_avgTop >= _avgSize)
+      _avgTop = 0;
+    
+
 }
 
 int IRSensor::GetReading()
@@ -99,6 +107,4 @@ int IRSensor::GetReading()
 void IRSensor::Loop() {
 
     AddReading(digitalRead(_pin) == 0);
-
-    delay(_deltaTime*1000.0);
 }

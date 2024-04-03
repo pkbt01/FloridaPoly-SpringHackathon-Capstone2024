@@ -10,6 +10,7 @@ class IRSensor{
     void Begin();
     void Stop();
     int GetReading();
+    double GetRPM();
     void Loop();
 
     private:
@@ -24,6 +25,10 @@ class IRSensor{
     double _deltaTime;
     int _size;
     int _top;
+    int *_avgReadings;
+    int _avgTop;
+    int _avgSize;
+    double _avgRPM;
 };
 
 #endif
