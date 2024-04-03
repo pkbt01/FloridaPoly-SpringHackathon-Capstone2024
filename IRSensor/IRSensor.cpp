@@ -81,13 +81,13 @@ void IRSensor::UpdateLatest()
 
     _latestReading = count;
 
-     _avgReadings[_avgTop] = _latestReading;
+     _avgReadings[_avgTop] = 60.0 * _latestReading / _window;
 
     double sum = 0.0;
 
     for (int i = 0; i < _avgSize; i++)
     {
-      sum+= _avgReadings[i];
+      sum += _avgReadings[i];
     }
 
     _avgRPM = sum / _avgSize;
