@@ -20,7 +20,7 @@ void setup() {
   ir = new IRSensor(10, 500, 1.0);
   ir->Begin();
 
-  holding = 0;
+  holdingCurrent = 0;
 }
 
 void loop() {
