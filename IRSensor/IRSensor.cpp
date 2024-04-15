@@ -11,7 +11,7 @@ IRSensor::IRSensor(int pin, int rate, double window)
     _size = _window * _rate;
     _top = 0;
     _avgTop = 0;
-    _avgSize = 10;
+    _avgSize = 3;
     _latestReading = 0;
 }
 
