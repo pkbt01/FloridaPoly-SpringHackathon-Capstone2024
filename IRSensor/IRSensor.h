@@ -10,6 +10,7 @@ class IRSensor{
     void Begin();
     void Stop();
     int GetReading();
+    int GetRate();
     double GetRPM();
     void Loop();
 

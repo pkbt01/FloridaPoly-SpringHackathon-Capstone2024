@@ -104,6 +104,11 @@ int IRSensor::GetReading()
    return _latestReading;
 }
 
+int IRSensor::GetRate()
+{
+  return _rate;
+}
+
 void IRSensor::Loop() {
 
     AddReading(digitalRead(_pin) == 0);
